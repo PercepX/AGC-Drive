@@ -1,4 +1,4 @@
-name: opencood
+name: agcdrive
 channels:
   - defaults
 dependencies:
