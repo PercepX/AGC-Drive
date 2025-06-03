@@ -1,0 +1,148 @@
+debug: false
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: info
+    ai.basic.x1.adapter.port.dao.mybatis.mapper: info
+  request:
+    maxPayloadLength: 100000
+
+server:
+  address: 0.0.0.0
+  port: 8080
+  shutdown: graceful
+
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: xtreme1
+  datasource:
+    url: jdbc:mysql://mysql:3306/xtreme1
+    username: xtreme1
+    password: Rc4K3L6f
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      max-lifetime: 54000
+  redis:
+    host: redis
+    port: 6379
+    password:
+    database: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,prometheus"
+  # Probes for none Kubernetes env.
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  # Probes for Kubernetes env.
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  metrics:
+    tags:
+      application: xtreme1
+
+jwt:
+  secret: G6j7j#$&YOy9&p(s2b@v53^)38E!cG49
+  issuer: BasicAI
+  expireHours: 120
+auth:
+  # Whether to enable the registration
+  register:
+    enabled: true
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+  type-aliases-package: ai.basic.x1.adapter.port.dao.mybatis.model
+
+minio:
+  endpoint: http://minio:9000/
+  accessKey: admin
+  secretKey: 1tQB970y
+  bucketName: xtreme1
+
+export:
+  data:
+    version: Xtreme1 v0.6
+file:
+  tempPath: /tmp/xtreme1/
+  size:
+    large: 800
+    medium: 400
+    small: 200
+  prefix:
+    large: large
+    medium: medium
+    small: small
+dataset-initial:
+  dataset:
+    point-cloud:
+      name: LiDAR Fusion Trial
+      fileName: xtreme1-lidar-fusion-trial.zip
+      type: LIDAR_FUSION
+      userName: admin
+      classes[0]:
+        name: Car
+        color: "#f39c12"
+        toolType: CUBOID
+        toolTypeOptions: '{defaultHeight:"",isConstraints:false,minHeight:"",minPoints:""}'
+        attributes: '[{"name":"Occlusion","type":"RADIO","required":false,"options":[{"name":"Yes","attributes":[]},{"name":"No","attributes":[]}]},{"name":"Confidence","type":"RADIO","required":false,"options":[{"name":"High","attributes":[]},{"name":"Medium","attributes":[]},{"name":"Low","attributes":[]}]}]'
+      classes[1]:
+        name: Van
+        color: "#2ecc71"
+        toolType: CUBOID
+        toolTypeOptions: '{defaultHeight:"",isConstraints:false,minHeight:"",minPoints:""}'
+        attributes: '[{"name":"Occlusion","type":"RADIO","required":false,"options":[{"name":"Yes","attributes":[]},{"name":"No","attributes":[]}]},{"name":"Confidence","type":"RADIO","required":false,"options":[{"name":"High","attributes":[]},{"name":"Medium","attributes":[]},{"name":"Low","attributes":[]}]}]'
+      classes[2]:
+        name: Truck
+        color: "#d1ccc0"
+        toolType: CUBOID
+        toolTypeOptions: '{defaultHeight:"",isConstraints:false,minHeight:"",minPoints:""}'
+        attributes: '[{"name":"Occlusion","type":"RADIO","required":false,"options":[{"name":"Yes","attributes":[]},{"name":"No","attributes":[]}]},{"name":"Confidence","type":"RADIO","required":false,"options":[{"name":"High","attributes":[]},{"name":"Medium","attributes":[]},{"name":"Low","attributes":[]}]}]'
+    image:
+      name: Image Trial
+      fileName: xtreme1-image-trial.zip
+      type: IMAGE
+      userName: admin
+      classes[0]:
+        name: Cat
+        color: "#7dfaf2"
+        toolType: BOUNDING_BOX
+        toolTypeOptions:
+        attributes:
+      classes[1]:
+        name: Dog
+        color: "#f87d7d"
+        toolType: POLYLINE
+        toolTypeOptions:
+        attributes:
+
+image:
+  resultEvaluate:
+    url: http://image-object-detection:5000/image/resultEvaluate
+
+pointCloud:
+  resultEvaluate:
+    url: http://pcd-tools:5000/pointCloud/resultEvaluate
+  convertRender:
+    url: http://pcd-tools:5000/pointcloud/convert_render
+
+dataset:
+  similarity:
+    url: http://image-vect-visualization:5000/api/v1/calcSimilarity

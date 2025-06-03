@@ -1,0 +1,88 @@
+[
+    {
+        "pairwise_t_matrix1": [
+            [
+                0.9995761958189003,
+                0.0290817957406875,
+                -0.0012953411565125395,
+                5.4493371402139665
+            ],
+            [
+                -0.029064239706336016,
+                0.9995058853456267,
+                0.01196892349990896,
+                -10.807750456083976
+            ],
+            [
+                0.0016427788979249342,
+                -0.011926202914212003,
+                0.9999275308548822,
+                0.6598376429631677
+            ],
+            [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        ]
+    },
+    {
+        "version": "Xtreme1 v0.6",
+        "dataId": 7765,
+        "sourceName": "Ground Truth",
+        "classificationValues": null,
+        "objects": [
+            {
+                "id": "87EF72BA-47BF-48F2-979B-9384E0E43E06",
+                "type": "3D_BOX",
+                "classId": 19,
+                "className": "Car",
+                "trackId": "ykg5Eur4hv0F53bw",
+                "trackName": "1",
+                "classValues": [
+                    {
+                        "id": "fd8660b0-09a3-40be-a837-267aefe3df7b",
+                        "name": "visibility",
+                        "type": "DROPDOWN",
+                        "alias": "visibility",
+                        "value": "visible",
+                        "isLeaf": true
+                    },
+                    {
+                        "id": "e825ed9e-d5ff-45c3-bede-810131e18d5d",
+                        "name": "is_ego",
+                        "type": "MULTI_SELECTION",
+                        "alias": "is_ego",
+                        "value": [
+                            "ego"
+                        ],
+                        "isLeaf": true
+                    }
+                ],
+                "contour": {
+                    "pointN": 1631,
+                    "points": [],
+                    "size3D": {
+                        "x": 4.289303625870805,
+                        "y": 2.10792349644416,
+                        "z": 2.20902321230331
+                    },
+                    "center3D": {
+                        "x": 15.930440307594754,
+                        "y": 15.861726903984788,
+                        "z": -1.0172332477778254
+                    },
+                    "viewIndex": 0,
+                    "rotation3D": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0.5632186256727955
+                    }
+                },
+                "modelConfidence": null,
+                "modelClass": ""
+            }
+        ]
+    }
+]

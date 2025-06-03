@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ai.basic.x1.adapter.port.dao.mybatis.mapper.DataInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ai.basic.x1.adapter.port.dao.mybatis.model.DataInfo">
+        <id column="id" property="id"/>
+        <result column="dataset_id" property="datasetId"/>
+        <result column="name" property="name"/>
+        <result column="order_name" property="orderName"/>
+        <result column="content" property="content"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result column="type" property="type"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="status" property="status"/>
+        <result column="annotation_status" property="annotationStatus"/>
+        <result column="split_type" property="splitType"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="del_unique_key" property="delUniqueKey"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <select id="getDatasetStatisticsByDatasetIds" resultType="ai.basic.x1.adapter.port.dao.mybatis.model.DatasetStatistics">
+        SELECT dataset_id AS datasetId,
+               SUM(CASE `annotation_status` WHEN 'ANNOTATED' THEN 1 ELSE 0 END) AS annotatedCount,
+               SUM(CASE `annotation_status` WHEN 'NOT_ANNOTATED' THEN 1 ELSE 0 END) AS notAnnotatedCount,
+               SUM(CASE `annotation_status` WHEN 'INVALID' THEN 1 ELSE 0 END) AS invalidCount
+        FROM data WHERE dataset_id in
+        <foreach collection="datasetIds" item="datasetId" open="(" separator="," close=")">
+            #{datasetId}
+        </foreach> AND is_deleted = FALSE AND type = 'SINGLE_DATA'
+        GROUP BY dataset_id
+    </select>
+
+    <select id="listByIds" resultMap="BaseResultMap">
+        SELECT * FROM
+        data d
+        WHERE d.id in
+        <foreach collection="ids" index="index" item="id" open="("
+                 separator=","
+                 close=")">
+            #{id}
+        </foreach>
+        <if test="isQueryDeletedData == false">
+            AND d.is_deleted=#{isQueryDeletedData}
+        </if>
+    </select>
+
+    <select id="selectSixDataIdByDatasetIds" resultType="ai.basic.x1.adapter.port.dao.mybatis.model.DatasetSixData">
+        SELECT
+            SUBSTRING_INDEX( GROUP_CONCAT( id ), ',', 6 ) AS dataIds,d.dataset_id
+        FROM
+            data d
+        WHERE
+            d.dataset_id IN
+            <foreach collection="datasetIds" index="index" item="datasetId" open="("
+                     separator=","
+                     close=")">
+                #{datasetId}
+            </foreach>
+        AND d.type = 'SINGLE_DATA' AND d.is_deleted = 0
+        GROUP BY
+            dataset_id
+    </select>
+
+    <select id="findModelRunDataIds" resultType="java.lang.Long">
+        SELECT id FROM data ${ew.customSqlSegment}
+        <if test="isExcludeModelData == true">
+            AND id not in (SELECT data_id FROM model_dataset_result WHERE model_id =  #{modelId})
+        </if>
+        limit #{limit}
+    </select>
+
+    <select id="findModelRunDataCount" resultType="java.lang.Long">
+        SELECT count(*) FROM data ${ew.customSqlSegment}
+        <if test="isExcludeModelData == true">
+            AND id not in (SELECT data_id FROM model_dataset_result WHERE model_id =  #{modelId})
+        </if>
+    </select>
+
+    <select id="selectDataPage" resultMap="BaseResultMap">
+        SELECT d.*
+        <if test="dataInfoQuery.runRecordId != null">
+            ,mdr.data_confidence
+        </if>
+        FROM data d
+        ${ew.customSqlSegment("d")}
+        <include refid="selectDataByPageOrder"/>
+    </select>
+
+
+    <select id="getExportData" resultMap="BaseResultMap">
+        SELECT d.id,d.type
+        FROM data d
+        ${ew.customSqlSegment("d")}
+        <include refid="selectDataByPageOrder"/>
+    </select>
+
+    <sql id="selectDataByPageOrder">
+        ORDER BY d.type DESC
+        <choose>
+            <when test="dataInfoQuery.sortField != null and dataInfoQuery.sortField != ''
+        and dataInfoQuery.ascOrDesc != null and dataInfoQuery.ascOrDesc != ''">
+                ,d.${dataInfoQuery.sortField} ${dataInfoQuery.ascOrDesc}
+            </when>
+            <otherwise>
+                ,d.name ASC
+            </otherwise>
+        </choose>
+        ,d.id ASC
+    </sql>
+
+    <delete id="deleteById">
+        update data set del_unique_key = id, is_deleted = true where id = #{id}
+    </delete>
+
+    <delete id="deleteByDatasetId">
+        update data set del_unique_key = id, is_deleted = true where dataset_id = #{datasetId}
+    </delete>
+
+    <select id="selectFirstDataIdBySceneIds" resultType="java.lang.Long">
+        SELECT
+        SUBSTRING_INDEX(GROUP_CONCAT(d.id ORDER BY d.`name` ASC,d.id ASC),',',1) as dataId
+        FROM
+        data d
+        WHERE
+        d.dataset_id = #{datasetId}
+        AND d.parent_id in
+        <foreach collection="sceneIds" item="sceneId" open="(" separator="," close=")">
+            #{sceneId}
+        </foreach>
+        AND is_deleted = 0
+        GROUP BY
+        parent_id
+    </select>
+</mapper>
