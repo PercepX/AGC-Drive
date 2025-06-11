@@ -35,12 +35,7 @@ An open-source toolkit is also provided, featuring:
 
 We provide two download options:
 
-- 📦 **Baidu Netdisk (Recommended for fast download in China)**  
-  🔗 [**Download via Baidu Netdisk**](https://pan.baidu.com/s/13r7msTs196CpG9huTyoRYQ?pwd=yen6)  
-  (Password: `yen6`)
 
-- 🌐 **Public Web Preview & Download (Supports online browsing, slower download)**  
-  🔗 [**Download via Public Link**](http://49.232.218.165:5911/)
 
 ---
 
