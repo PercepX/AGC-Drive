@@ -69,7 +69,23 @@ Recommended: **Python 3.7+**, **CUDA 11.7+**
 conda env create -f environment.yml
 conda activate agcdrive
 ```
+## 📆 TODO List
+- [x] Paper released on arXiv.
+- [ ] Provide pretrained checkpoint.
+- [ ] Provide the cleaned AGC-Drive dataset.
+- [ ] Support more of the latest methods.
 
+## ☕ Citation
+If you find our projects helpful to your research, please consider citing our paper:
+```
+@article{hou2025agc,
+  title={AGC-Drive: A Large-Scale Dataset for Real-World Aerial-Ground Collaboration in Driving Scenarios},
+  author={Hou, Yunhao and Zou, Bochao and Zhang, Min and Chen, Ran and Yang, Shangdong and Zhang, Yanmei and Zhuo, Junbao and Chen, Siheng and Chen, Jiansheng and Ma, Huimin},
+  journal={arXiv preprint arXiv:2506.16371},
+  year={2025}
+}
+```
+For any issues or further discussions, feel free to contact M202410661@xs.ustb.edu.com
 ## 📚 Supported Projects
 
 The following key projects and papers are referenced and used as baselines in our benchmarks:
