@@ -179,6 +179,7 @@ The evaluation results  will be dumped in the model directory.
 - [x] Paper released on arXiv.
 - [x] Provide pretrained checkpoint.
 - [x] Provide the lidar-only AGC-Drive dataset.
+- [ ] Provide the complete set of optimized alignment parameters. 
 - [ ] Provide the complete AGC-Drive dataset.
 - [ ] Support more of the latest methods.
 
